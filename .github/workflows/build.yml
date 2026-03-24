@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Core Module
         # We use -o for "Offline Mode" so it only uses the files we just installed
-        run: mvn clean package -o -pl :valhallammo-core -am
+        run: mvn clean package -pl :valhallammo-core -am
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
