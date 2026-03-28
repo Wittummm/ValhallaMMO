@@ -33,8 +33,14 @@ jobs:
             mkdir -p ~/buildtools && cd ~/buildtools
             wget -q https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
             java -jar BuildTools.jar --rev 1.21.5 --remapped
-            echo "=== BuildTools exit code: $? ==="
-            tail -20 BuildTools.log.txt 2>/dev/null || true
+            echo "=== Installing spigot into local Maven repo ==="
+            mvn install:install-file \
+             -Dfile=~/buildtools/spigot-1.21.5.jar \
+             -DgroupId=org.spigotmc \
+             -DartifactId=spigot \
+             -Dversion=1.21.5-R0.1-SNAPSHOT \
+             -Dpackaging=jar \
+             -Dclassifier=remapped-obf
     
       - name: Verify BuildTools output
         run: |
