@@ -27,7 +27,11 @@ jobs:
           
           curl -L -o dh.jar https://github.com/decentsoftware-eu/decentholograms/releases/download/2.8.5/DecentHolograms-2.8.5.jar
           mvn install:install-file -Dfile=dh.jar -DgroupId=com.github.decentsoftware-eu -DartifactId=decentholograms -Dversion=2.8.5 -Dpackaging=jar
-
+      - name: Run BuildTools
+        run: |
+           wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+           java -jar BuildTools.jar --rev 1.21 --remapped
+    
       - name: Build Core Module
         # We use -o for "Offline Mode" so it only uses the files we just installed
         run: mvn clean package -pl :valhallammo-core -am
