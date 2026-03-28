@@ -2,38 +2,54 @@ name: Build ValhallaMMO
 
 on:
   push:
-    branches: [ "main", "master", "premium"]
-  workflow_dispatch: # This adds the "Run workflow" button
+    branches: [ "main", "master", "premium" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Install JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
 
-      - name: Download & Install Missing Dependencies
+      - name: Cache BuildTools output
+        id: cache-buildtools
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/spigotmc
+          key: spigot-1.21-remapped-v1
+
+      - name: Download & Run BuildTools
+        if: steps.cache-buildtools.outputs.cache-hit != 'true'
         run: |
-          # Manually download Vault and DecentHolograms to skip the JitPack 500 error
+          wget -q https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+          java -jar BuildTools.jar --rev 1.21 --remapped
+
+      - name: Install Missing Dependencies
+        run: |
           curl -L -o vault.jar https://github.com/MilkBowl/VaultAPI/releases/download/1.7.1/VaultAPI-1.7.1.jar
-          mvn install:install-file -Dfile=vault.jar -DgroupId=com.github.MilkBowl -DartifactId=VaultAPI -Dversion=1.7.1 -Dpackaging=jar
-          
+          mvn install:install-file -Dfile=vault.jar \
+            -DgroupId=com.github.MilkBowl \
+            -DartifactId=VaultAPI \
+            -Dversion=1.7.1 \
+            -Dpackaging=jar
+
           curl -L -o dh.jar https://github.com/decentsoftware-eu/decentholograms/releases/download/2.8.5/DecentHolograms-2.8.5.jar
-          mvn install:install-file -Dfile=dh.jar -DgroupId=com.github.decentsoftware-eu -DartifactId=decentholograms -Dversion=2.8.5 -Dpackaging=jar
-      - name: Run BuildTools
-        run: |
-           wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-           java -jar BuildTools.jar --rev 1.21 --remapped
-    
+          mvn install:install-file -Dfile=dh.jar \
+            -DgroupId=com.github.decentsoftware-eu \
+            -DartifactId=decentholograms \
+            -Dversion=2.8.5 \
+            -Dpackaging=jar
+
       - name: Build Core Module
-        # We use -o for "Offline Mode" so it only uses the files we just installed
         run: mvn clean package -pl :valhallammo-core -am
 
       - name: Upload JAR
