@@ -1,8 +1,11 @@
 name: Build ValhallaMMO
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "premium"]
   workflow_dispatch: # This adds the "Run workflow" button
 
 jobs:
