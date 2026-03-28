@@ -73,18 +73,13 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
+<dependency>
+    <groupId>org.spigotmc</groupId>
+    <artifactId>spigot</artifactId>
+    <version>1.21.5-R0.1-SNAPSHOT</version>
+    <classifier>remapped-mojang</classifier>
+    <scope>provided</scope>
+</dependency>
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>coreprotect</artifactId>
@@ -174,13 +169,12 @@
             <version>5.9.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.sachin</groupId>
-            <artifactId>lootin</artifactId>
-            <version>13.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/Lootin-13.4.jar</systemPath>
-        </dependency>
+     <dependency>
+    <groupId>com.github.sachin</groupId>
+    <artifactId>lootin</artifactId>
+    <version>13.4</version>
+    <scope>provided</scope>
+</dependency>
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
