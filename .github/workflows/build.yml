@@ -25,13 +25,17 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.m2/repository/org/spigotmc
-          key: spigot-1.21.5-remapped-v1
+          key: spigot-1.21.5-remapped-v2
 
-      - name: Download & Run BuildTools
+      - name: Download and Run BuildTools
         if: steps.cache-buildtools.outputs.cache-hit != 'true'
         run: |
-          wget -q https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-          java -jar BuildTools.jar --rev 1.21.5 --remapped
+            mkdir -p ~/buildtools && cd ~/buildtools
+            wget -q https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+            java -jar BuildTools.jar --rev 1.21.5 --remapped
+            echo "=== BuildTools exit code: $? ==="
+            tail -20 BuildTools.log.txt 2>/dev/null || true
+    
       - name: Verify BuildTools output
         run: |
           echo "=== Spigot jars in ~/.m2 ==="
