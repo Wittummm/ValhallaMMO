@@ -47,6 +47,11 @@ jobs:
             -DgroupId=com.github.decentsoftware-eu \
             -DartifactId=decentholograms \
             -Dversion=2.8.5 \
+            -Dpackaging=jar   
+          mvn install:install-file -Dfile=core/Lootin-13.4.jar \
+            -DgroupId=com.github.sachin \
+            -DartifactId=lootin \
+            -Dversion=13.4 \
             -Dpackaging=jar
 
       - name: Build Core Module
