@@ -32,6 +32,12 @@ jobs:
         run: |
           wget -q https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
           java -jar BuildTools.jar --rev 1.21.5 --remapped
+      - name: Verify BuildTools output
+        run: |
+          echo "=== Spigot jars in ~/.m2 ==="
+          find ~/.m2/repository/org/spigotmc -name "*.jar" | sort
+          echo "=== BuildTools log tail ==="
+          cat ~/buildtools/BuildTools.log.txt 2>/dev/null | tail -30 || echo "No log found"
 
       - name: Install Missing Dependencies
         run: |
